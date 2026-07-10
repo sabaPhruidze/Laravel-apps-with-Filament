@@ -20,19 +20,26 @@ class ConferenceResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
+    // url() , label(), prefixIcon , prefix, default(),
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->required(),
-                Forms\Components\TextInput::make('description')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('start_date')
+                    ->required() ->helperText('The name of the conference')->default('My Conference'),
+                Forms\Components\RichEditor::make('description')
+                    ->required()->hint('here is the hint')->hintIcon('heroicon-o-rectangle-stack')->toolbarButtons(['h2','bold']),
+                Forms\Components\DatePicker::make('start_date')
                     ->required(),
                 Forms\Components\DateTimePicker::make('end_date')
-                    ->required(),
-                Forms\Components\TextInput::make('status')
-                    ->required(),
+                    ->required()->native(false),
+                    // Checkbox
+                Forms\Components\Toggle::make('is_published')->default(true),
+                Forms\Components\Select::make('status')
+                    ->required()->options([
+                        'draft' => 'Draft',
+                        'published' => 'Published',
+                        'archiverd' => 'Archived',
+                    ]),
                 Forms\Components\TextInput::make('region')
                     ->required(),
                 Forms\Components\Select::make('venue_id')
