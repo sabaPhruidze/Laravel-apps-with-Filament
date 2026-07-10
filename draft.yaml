@@ -1,15 +1,15 @@
 models:
   Conference:
-    name:string
+    name: string
     description: string
     start_date: datetime
     end_date: datetime
     status: string
     region: string
-    venue_isd: unsignedInteger
+    venue_id: unsignedInteger
     relationships:
      belongsTo: Venue
-     beolongsToMany: Speaker, Talk
+     belongsToMany: Speaker, Talk
 
   Venue:
     name: string
@@ -23,13 +23,13 @@ models:
     name: string
     email: string
     bio: text
-    twitter_handle:string
+    twitter_handle: string
     relationships:
-     beolongsToMany: Conference
+     belongsToMany: Conference
 
   Talk:
    title: string
    abstract: text
-   relationships: Speaker
+   relationships:
     belongsTo: Speaker
-    beolongsToMany: Conference
+    belongsToMany: Conference
