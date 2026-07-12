@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Region;
 use App\Filament\Resources\VenueResource\Pages;
 use App\Filament\Resources\VenueResource\RelationManagers;
 use App\Models\Venue;
@@ -24,13 +25,15 @@ class VenueResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->required(),
+                    ->required()->maxLength(255),
                 Forms\Components\TextInput::make('city')
-                    ->required(),
+                    ->required()->maxLength(255),
                 Forms\Components\TextInput::make('country')
-                    ->required(),
+                    ->required()->maxLength(255),
                 Forms\Components\TextInput::make('postal_code')
-                    ->required(),
+                    ->required()->maxLength(255),
+                Forms\Components\Select::make('region')
+                    ->enum(Region::class)->options(Region::class)
             ]);
     }
 
