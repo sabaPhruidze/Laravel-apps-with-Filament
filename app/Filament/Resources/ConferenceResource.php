@@ -45,6 +45,7 @@ class ConferenceResource extends Resource
                     ->live()
                     ->enum(Region::class)->options(Region::class),
                 Forms\Components\Select::make('venue_id')
+                    ->searchable()
                     ->relationship('venue', 'name',modifyQueryUsing:function(Builder $query,Forms\Get $get) {
                         ray();
                         return $query->where('region',$get(path:'region'));
