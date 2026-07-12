@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Region;
 use App\Filament\Resources\ConferenceResource\Pages;
 use App\Filament\Resources\ConferenceResource\RelationManagers;
 use App\Models\Conference;
@@ -40,10 +41,14 @@ class ConferenceResource extends Resource
                         'published' => 'Published',
                         'archiverd' => 'Archived',
                     ]),
-                Forms\Components\TextInput::make('region')
-                    ->required(),
+                Forms\Components\Select::make('region')
+                    ->live()
+                    ->enum(Region::class)->options(Region::class),
                 Forms\Components\Select::make('venue_id')
-                    ->relationship('venue', 'name'),
+                    ->relationship('venue', 'name',modifyQueryUsing:function(Builder $query,Forms\Get $get) {
+                        ray();
+                        return $query->where('region',$get(path:'region'));
+                    }),
             ]);
     }
 
