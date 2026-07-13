@@ -35,7 +35,22 @@ class SpeakerResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('twitter_handle')
-                    ->searchable(),
+                    ->searchable()->label('Twitter')->getStateUsing(function($record){
+                        return '@'.$record->twitter_handle;
+                    })
+                    ->url(function($record){
+                        return 'https://x.com/'.$record->twitter_handle;
+                    }),
+                    TextEntry::make('has_spoken')
+                    ->getStateUsing(function($record){
+                        return $record->talks()->where('status',TalkStatus::APPROVED)->count()
+                        >0 ? 'Previous Spekaer' : 'Has Not Spoken';
+                    })->badge()->color(function($state){
+                        if($state === 'Previous Spekaer') {
+                            return 'success';
+                        }
+                            return 'primary';
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -49,7 +64,6 @@ class SpeakerResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
@@ -79,6 +93,14 @@ class SpeakerResource extends Resource
                     return 'https://x.com/'.$record->twitter_handle;
                 })
             ])
+
+        ]);
+        Section::make('Other Information')
+            ->schema([
+                TextEntry::make('bio')
+                ->extraAttributes(['class' => 'prose dark:prose-invert'])
+                ->html(),
+                TextEntry::make('qualifications'),
         ]);
     }
     public static function getRelations(): array
