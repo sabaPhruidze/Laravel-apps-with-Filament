@@ -31,4 +31,10 @@ class Talk extends Model
         // email the spekaer telling
         $this->save();
     }
+    public function reject():void
+    {
+        $this->status = TalkStatus::REJECTED;
+        // email the spekaer telling
+        $this->save();
+    }
 }
