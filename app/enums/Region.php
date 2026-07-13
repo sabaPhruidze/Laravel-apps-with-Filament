@@ -2,7 +2,9 @@
 
 namespace App\Enums;
 
-enum Region: string
+use Filament\Support\Contracts\HasLabel;
+
+enum Region: string implements HasLabel
 {
     case US = 'US';
     case EU = "EU";

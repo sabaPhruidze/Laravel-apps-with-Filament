@@ -4,17 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Enums\Region;
 use App\Filament\Resources\ConferenceResource\Pages;
-use App\Filament\Resources\ConferenceResource\RelationManagers;
 use App\Models\Conference;
-use App\Models\Speaker;
 use App\Models\Venue;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 
 class ConferenceResource extends Resource
 {
@@ -26,39 +23,7 @@ class ConferenceResource extends Resource
     // url() , label(), prefixIcon , prefix, default(),
     {
         return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required() ->helperText('The name of the conference')->default('My Conference'),
-                Forms\Components\RichEditor::make('description')
-                    ->required()->hint('here is the hint')->hintIcon('heroicon-o-rectangle-stack')->toolbarButtons(['h2','bold']),
-                Forms\Components\DatePicker::make('start_date')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('end_date')
-                    ->required()->native(false),
-                    // Checkbox
-                Forms\Components\Toggle::make('is_published')->default(true),
-                Forms\Components\Select::make('status')
-                    ->required()->options([
-                        'draft' => 'Draft',
-                        'published' => 'Published',
-                        'archiverd' => 'Archived',
-                    ]),
-                // Forms\Components\Select::make('region')
-                //     ->live()
-                //     ->enum(Region::class)->options(Region::class),
-                Forms\Components\Select::make('venue_id')
-                    ->searchable()
-                    ->preload() // for speed
-                    ->createOptionForm(Venue::getForm())
-                    ->editOptionForm(Venue::getForm())
-                    ->relationship('venue', 'name',modifyQueryUsing:function(Builder $query,Forms\Get $get) {
-                        // ray();
-                        return $query->where('region',$get(path:'region'));
-                    }),
-                Forms\Components\CheckboxList::make('speakers')
-                ->relationship('speakers','name')
-                ->required(),
-            ]);
+            ->schema(Conference::getForm());
     }
 
     public static function table(Table $table): Table

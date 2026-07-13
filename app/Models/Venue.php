@@ -33,8 +33,14 @@ class Venue extends Model
                     ->required()->maxLength(255),
                 TextInput::make('postal_code')
                     ->required()->maxLength(255),
-                Select::make('region')
-                    ->enum(Region::class)->options(Region::class)
+               Select::make('region')
+                ->options([
+                    'US' => 'US',
+                    'EU' => 'EU',
+                    'AU' => 'AU',
+                    'India' => 'India',
+                    'Online' => 'Online',
+                ])
             ];
    }
 }
