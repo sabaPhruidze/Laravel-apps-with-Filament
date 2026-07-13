@@ -7,6 +7,7 @@ use App\Filament\Resources\TalkResource\RelationManagers;
 use App\Models\Talk;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -40,15 +41,15 @@ class TalkResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->sortable()
-                    ->searchable()
-                    ->rules(['required','max:255']),
+                    ->searchable(),
+                    // ->rules(['required','max:255']),
                     // ->description(function(Talk $record){
                     //     return $tr::of($record->abstract)->limit(40);
                     // }),
-                Tables\Columns\TextColumn::make('speaker.avatar')
-                ->defaultImageUrl(function($record){
-                    return 'url'. urlencode($record->speaker->name);
-                }),
+                // Tables\Columns\TextColumn::make('speaker.avatar')
+                // ->defaultImageUrl(function($record){
+                //     return 'url'. urlencode($record->speaker->name);
+                // }),
                 Tables\Columns\TextColumn::make('speaker.name')
                     ->numeric()
                     ->sortable()
@@ -66,7 +67,18 @@ class TalkResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                ->slideOver(),
+                Tables\Actions\Action::make('approve')
+                ->icon('heroicon-o-check-circle')
+                ->color('success')
+                ->action(function(Talk $record){
+                    $record->approve();
+                })->after(function(){
+                    Notification::make()->success()->title('This talk was approved')
+                    ->body('The speaker has been notified and the talk has been added to the conferece schedule')
+                    ->send();
+                })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
