@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Filament\Forms;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs;
@@ -98,6 +100,28 @@ class Conference extends Model
                         }),
 
                     ]),
+
+                ]),
+                Actions::make([
+                        Action::make('star')
+                            ->label('Fill with factory Data')
+                            ->icon('heroicon-m-star')
+                            ->visible(function(string $operation) {
+                                if($operation !== 'create'){
+                                    return false;
+                                }
+                                if(!app()->environment('local')){
+                                    return false;
+                                }
+                                return true;
+                            })
+                            ->action(function ($livewire) {
+
+                                $data=Conference::factory()->make()->toArray();
+                                // unset($data['venue_id']);
+                                $livewire->form->fill($data);
+                            }),
+
             ]),
             // Section::make('Conference Details')
             //     // ->aside() მარცხნივ გაიწევა
