@@ -51,7 +51,7 @@ class ConferenceResource extends Resource
                     ->createOptionForm(Venue::getForm())
                     ->editOptionForm(Venue::getForm())
                     ->relationship('venue', 'name',modifyQueryUsing:function(Builder $query,Forms\Get $get) {
-                        ray();
+                        // ray();
                         return $query->where('region',$get(path:'region'));
                     }),
             ]);
