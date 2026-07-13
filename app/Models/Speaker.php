@@ -37,9 +37,10 @@ class Speaker extends Model
                     ->columnSpanFull(),
                 TextInput::make('twitter_handle')
                     ->required(),
-                CheckboxList::make('qualitfications')
+                CheckboxList::make('qualifications')
                     ->columnSpanFull()
                     ->searchable()
+                    ->bulkToggleable() // select all
                     ->options([
                          'business-leader' => 'Business Leader',
                          'charisma' => 'Charismatic Speaker',
@@ -51,7 +52,12 @@ class Speaker extends Model
                          'youtube-influencer' => 'Large YouTube Following',
                          'open-source' => 'Open Source Creator / Maintainer',
                          'unique-perspective' => 'Unique Perspective',
-                    ])->columns(3)
+                    ])
+                    ->descriptions([
+                         'business-leader' => 'it is about a business leader',
+                         'charisma' => 'This is even more interesting data',
+                    ])
+                    ->columns(3)
             ];
     }
 }

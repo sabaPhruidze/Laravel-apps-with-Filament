@@ -9,4 +9,9 @@ enum Region: string
     case AU = "AU";
     case India = 'India';
     case Online = "Online";
+
+    public function getLabel():?string
+    {
+        return $this->value;
+    }
 }

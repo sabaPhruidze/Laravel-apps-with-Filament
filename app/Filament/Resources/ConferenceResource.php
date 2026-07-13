@@ -6,6 +6,7 @@ use App\Enums\Region;
 use App\Filament\Resources\ConferenceResource\Pages;
 use App\Filament\Resources\ConferenceResource\RelationManagers;
 use App\Models\Conference;
+use App\Models\Speaker;
 use App\Models\Venue;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -42,9 +43,9 @@ class ConferenceResource extends Resource
                         'published' => 'Published',
                         'archiverd' => 'Archived',
                     ]),
-                Forms\Components\Select::make('region')
-                    ->live()
-                    ->enum(Region::class)->options(Region::class),
+                // Forms\Components\Select::make('region')
+                //     ->live()
+                //     ->enum(Region::class)->options(Region::class),
                 Forms\Components\Select::make('venue_id')
                     ->searchable()
                     ->preload() // for speed
@@ -54,6 +55,9 @@ class ConferenceResource extends Resource
                         // ray();
                         return $query->where('region',$get(path:'region'));
                     }),
+                Forms\Components\CheckboxList::make('speakers')
+                ->relationship('speakers','name')
+                ->required(),
             ]);
     }
 
