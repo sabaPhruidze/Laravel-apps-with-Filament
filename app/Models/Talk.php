@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,5 +40,26 @@ class Talk extends Model
         $this->status = TalkStatus::REJECTED;
         // email the spekaer telling
         $this->save();
+    }
+    public static function getForm($speakerId = null):array
+    {
+        return [
+                // Forms\Components\TextInput::make('title')
+                //     ->required()
+                //     ->maxLength(255),
+                [
+                TextInput::make('title')
+                    ->required(),
+                RichEditor::make('abstract')
+                    ->required()
+                    ->columnSpanFull(),
+                Select::make('speaker_id')
+                    ->hidden(function() use($speakerId) {
+                        return $speakerId !== null;
+                    })
+                    ->relationship('speaker', 'name')
+                    ->required(),
+            ]
+            ];
     }
 }
